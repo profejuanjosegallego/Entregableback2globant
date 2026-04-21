@@ -84,7 +84,16 @@ public class UsuarioServicio {
     public boolean eliminarUsuarioEnBD(UUID id){
         //Buscar y validar si el ID que me envian existe
         //Elimino el registro en BD
-        return false;
+        Optional<Usuario>usuario_que_estoy_buscando=this.repositorioUsuario.findById(id);
+        if(usuario_que_estoy_buscando.isEmpty()){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "El usuario que quieres eliminar, no existe en BD"
+            );
+        }
+        Usuario usuario_que_encontre=usuario_que_estoy_buscando.get();
+        this.repositorioUsuario.deleteById(id);
+        return true;
     }
     public List<Usuario> buscarUsuariosEnBD(){
         //**** Dependiendo del parametro de busqueda debo implementar validaciones
